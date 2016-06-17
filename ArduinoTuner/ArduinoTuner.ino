@@ -4,7 +4,13 @@
 #define DEBUG 0
 
 // Send the CAT commands to trigger PTT in addition to driving the PTT output pin.  This is untested and not recommended.
-#define CAT_PTT 1
+#define CAT_PTT 0
+
+// Delay after setting the TX frequency and before triggering the PTT line, in milliseconds
+#define RX_2_TX_DELAY 3
+
+// Delay after releasing the PTT and before setting the RX frequency, in milliseconds
+#define TX_2_RX_DELAY 3
 
 // Serial interface to co
 SoftwareSerial mySerial(8, 9); // RX, TX
@@ -13,7 +19,7 @@ SoftwareSerial mySerial(8, 9); // RX, TX
 int pttInputPin = 7;
 
 // Arduino pin number for the PTT output.  This is connected to your radio.
-int pttOutputPin = 6;
+int pttOutputPin = 10;
 
 // Mode constants
 #define MODE_RX 1
@@ -106,6 +112,9 @@ void check_ptt()
       for (i = 0; i < CAT_CMD_LEN; i++)
          mySerial.write(pttOff[i]);
 #endif
+      if (TX_2_RX_DELAY > 0)
+         delay(TX_2_RX_DELAY);
+
        if (satMode)
           send_rx_switch_cmds();
     }
@@ -114,6 +123,9 @@ void check_ptt()
     else if (mode == MODE_TX) {
        if (satMode)
           send_tx_switch_cmds();
+
+       if (RX_2_TX_DELAY > 0)
+          delay(RX_2_TX_DELAY);
           
 #if CAT_PTT       
        for (i = 0; i < CAT_CMD_LEN; i++)
