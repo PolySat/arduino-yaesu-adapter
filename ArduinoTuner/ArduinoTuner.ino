@@ -157,7 +157,7 @@ void send_tx_switch_cmds()
    }
    else {
       txCommand[4] = CAT_SAT_TX_SET_FREQ;
-      txCommand[4] = CAT_SAT_TX_SET_MODE;
+      txMode[4] = CAT_SAT_TX_SET_MODE;
    }
 
 #if DEBUG
@@ -184,11 +184,11 @@ void send_rx_switch_cmds()
    // Ensure the command is directed to the VFO, not SAT TX, if we are in sat mode
    if (satMode) {
       rxCommand[4] = CAT_VFO_SET_FREQ;
-      rxCommand[4] = CAT_VFO_SET_MODE;
+      rxMode[4] = CAT_VFO_SET_MODE;
    }
    else {
       rxCommand[4] = CAT_SAT_RX_SET_FREQ;
-      rxCommand[4] = CAT_SAT_RX_SET_MODE;
+      rxMode[4] = CAT_SAT_RX_SET_MODE;
    }
 
 #if DEBUG
