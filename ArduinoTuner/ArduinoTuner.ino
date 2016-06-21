@@ -73,6 +73,8 @@ unsigned char pttOff[CAT_CMD_LEN] = { 0x00, 0x00, 0x00, 0x00, CAT_PTT_OFF };
 int mode = MODE_RX;
 // Global switch to disable our sat mode simulator
 int satMode = 0;
+// Global to keep track of the last time we received a byte from the host computer
+unsigned long lastRx = 0;
 
 void setup() {
    // Open serial communications and wait for port to open:
@@ -425,11 +427,16 @@ void loop()
    int i;
    
    check_ptt();
-   
+
+   // Reset our buffer if we haven't seen a character for more than 250ms
+   if (lastRx && (millis() - lastRx) > 250)
+      staCount = 0;
+
    // Handle and input characters from the computer facing serial port
    while (Serial.available()) {
       // Read and buffer one byte at a time
       staInput[staCount++] = Serial.read();
+      lastRx = millis();
       
       // Process a command from the computer once an entire command has been received
       if (staCount == CAT_CMD_LEN) {
