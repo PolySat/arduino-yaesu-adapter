@@ -75,7 +75,8 @@ void setup() {
 
    // set the data rate for the SoftwareSerial port
    mySerial.begin(9600);
-  
+
+  sta_help();
 }
 
 // Sends a CIV command to the radio
@@ -97,18 +98,22 @@ void handle_sta_command()
    if (staCount == 0)
       Serial.print("> ");
    else if (staInput[0] == '1') {
+      Serial.print("Sending simplex command\n");
       send_to_radio(simplex, sizeof(simplex));
       Serial.print("> ");
    }
    else if (staInput[0] == '2') {
-      send_to_radio(split_on, sizeof(split_on));
+     Serial.print("Sending split on command\n");
+     send_to_radio(split_on, sizeof(split_on));
       Serial.print("> ");
    }
    else if (staInput[0] == '3') {
+      Serial.print("Sending split off command\n");
       send_to_radio(split_off, sizeof(split_off));
       Serial.print("> ");
    }
    else if (staInput[0] == '4') {
+     Serial.print("Setting frequency to 437.270MHz\n");
       send_to_radio(set_freq, sizeof(set_freq));
       Serial.print("> ");
    }
