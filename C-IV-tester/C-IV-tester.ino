@@ -84,6 +84,9 @@ void send_to_radio(unsigned char *buff, int len)
 {
    int i;
 
+   Serial.print("Sending ");
+   Serial.print(len);
+   Serial.print(" bytes to the radio\n");
    for (i = 0; i < len; i = i + 1)
       mySerial.write(buff[i]);
 }
